@@ -59,6 +59,7 @@ else
 GOARCH_LOCAL := $(LOCAL_ARCH)
 endif
 export GOARCH ?= $(GOARCH_LOCAL)
+export GOARCH_LINUX ?= amd64
 
 LOCAL_OS := $(shell uname)
 ifeq ($(LOCAL_OS),Linux)
@@ -106,7 +107,7 @@ export ISTIO_BIN=$(GO_TOP)/bin
 # Using same package structure as pkg/
 export OUT_DIR=$(GO_TOP)/out
 export ISTIO_OUT:=$(OUT_DIR)/$(GOOS)_$(GOARCH)/$(BUILDTYPE_DIR)
-export ISTIO_OUT_LINUX:=$(OUT_DIR)/linux_amd64/$(BUILDTYPE_DIR)
+export ISTIO_OUT_LINUX:=$(OUT_DIR)/linux_$(GOARCH_LINUX)/$(BUILDTYPE_DIR)
 export HELM=$(ISTIO_OUT)/helm
 export ARTIFACTS ?= $(ISTIO_OUT)
 export REPO_ROOT := $(shell git rev-parse --show-toplevel)
@@ -143,10 +144,10 @@ export ISTIO_ENVOY_LINUX_VERSION ?= ${ISTIO_ENVOY_VERSION}
 export ISTIO_ENVOY_LINUX_DEBUG_URL ?= ${ISTIO_ENVOY_DEBUG_URL}
 export ISTIO_ENVOY_LINUX_RELEASE_URL ?= ${ISTIO_ENVOY_RELEASE_URL}
 # Variables for the extracted debug/release Envoy artifacts.
-export ISTIO_ENVOY_LINUX_DEBUG_DIR ?= ${OUT_DIR}/linux_amd64/debug
+export ISTIO_ENVOY_LINUX_DEBUG_DIR ?= ${OUT_DIR}/linux_${GOARCH_LINUX}/debug
 export ISTIO_ENVOY_LINUX_DEBUG_NAME ?= envoy-debug-${ISTIO_ENVOY_LINUX_VERSION}
 export ISTIO_ENVOY_LINUX_DEBUG_PATH ?= ${ISTIO_ENVOY_LINUX_DEBUG_DIR}/${ISTIO_ENVOY_LINUX_DEBUG_NAME}
-export ISTIO_ENVOY_LINUX_RELEASE_DIR ?= ${OUT_DIR}/linux_amd64/release
+export ISTIO_ENVOY_LINUX_RELEASE_DIR ?= ${OUT_DIR}/linux_${GOARCH_LINUX}/release
 export ISTIO_ENVOY_LINUX_RELEASE_NAME ?= envoy-${ISTIO_ENVOY_VERSION}
 export ISTIO_ENVOY_LINUX_RELEASE_PATH ?= ${ISTIO_ENVOY_LINUX_RELEASE_DIR}/${ISTIO_ENVOY_LINUX_RELEASE_NAME}
 
@@ -290,7 +291,7 @@ build: depend
 
 .PHONY: build-linux
 build-linux: depend
-	STATIC=0 GOOS=linux GOARCH=amd64 LDFLAGS='-extldflags -static -s -w' common/scripts/gobuild.sh $(ISTIO_OUT_LINUX)/ $(BINARIES)
+	STATIC=0 GOOS=linux GOARCH=$(GOARCH_LINUX) LDFLAGS='-extldflags -static -s -w' common/scripts/gobuild.sh $(ISTIO_OUT_LINUX)/ $(BINARIES)
 
 # Create targets for ISTIO_OUT_LINUX/binary
 # There are two use cases here:
@@ -303,7 +304,7 @@ ifeq ($(BUILD_ALL),true)
 $(ISTIO_OUT_LINUX)/$(shell basename $(1)): build-linux
 else
 $(ISTIO_OUT_LINUX)/$(shell basename $(1)):
-	STATIC=0 GOOS=linux GOARCH=amd64 LDFLAGS='-extldflags -static -s -w' common/scripts/gobuild.sh $(ISTIO_OUT_LINUX)/ $(1)
+	STATIC=0 GOOS=linux GOARCH=$(GOARCH_LINUX) LDFLAGS='-extldflags -static -s -w' common/scripts/gobuild.sh $(ISTIO_OUT_LINUX)/ $(1)
 endif
 endef
 
