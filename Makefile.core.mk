@@ -22,6 +22,7 @@ SHELL := /bin/bash -o pipefail
 VERSION ?= 1.5-dev
 
 # Base version of Istio image to use
+BASE_IMAGE ?= docker.io/istio/base
 BASE_VERSION ?= 1.5-dev.0
 
 export GO111MODULE ?= on

@@ -1,6 +1,7 @@
+ARG BASE_IMAGE=docker.io/istio/base
 ARG BASE_VERSION=latest
 
-FROM docker.io/istio/base:${BASE_VERSION}
+FROM ${BASE_IMAGE}:${BASE_VERSION}
 
 COPY client /usr/local/bin/client
 COPY server /usr/local/bin/server
