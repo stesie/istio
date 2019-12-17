@@ -61,6 +61,12 @@ endif
 export GOARCH ?= $(GOARCH_LOCAL)
 export GOARCH_LINUX ?= amd64
 
+ifeq ($(GOARCH_LINUX),arm)
+   export ARCH_TRIPLET_LINUX = arm-linux-gnueabihf
+else
+   export ARCH_TRIPLET_LINUX = x86_64-linux-gnu
+endif
+
 LOCAL_OS := $(shell uname)
 ifeq ($(LOCAL_OS),Linux)
    export GOOS_LOCAL = linux

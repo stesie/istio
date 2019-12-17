@@ -95,7 +95,9 @@ endif
 
 # Default proxy image.
 docker.proxyv2: BUILD_PRE=; chmod 755 envoy pilot-agent
-docker.proxyv2: BUILD_ARGS=--build-arg proxy_version=istio-proxy:${PROXY_REPO_SHA} --build-arg istio_version=${VERSION} --build-arg BASE_VERSION=${BASE_VERSION} --build-arg BASE_IMAGE=${BASE_IMAGE}
+docker.proxyv2: BUILD_ARGS=--build-arg proxy_version=istio-proxy:${PROXY_REPO_SHA} --build-arg istio_version=${VERSION} \
+		--build-arg BASE_VERSION=${BASE_VERSION} --build-arg BASE_IMAGE=${BASE_IMAGE} \
+		--build-arg ARCH_TRIPLET_LINUX=${ARCH_TRIPLET_LINUX}
 docker.proxyv2: tools/packaging/common/envoy_bootstrap_v2.json
 docker.proxyv2: install/gcp/bootstrap/gcp_envoy_bootstrap.json
 docker.proxyv2: $(ISTIO_ENVOY_LINUX_RELEASE_DIR)/envoy

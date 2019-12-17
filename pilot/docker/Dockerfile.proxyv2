@@ -22,10 +22,12 @@ COPY istio-iptables /usr/local/bin/istio-iptables
 # hadolint ignore=DL3007
 FROM gcr.io/distroless/cc:latest as distroless
 
+ARG ARCH_TRIPLET_LINUX=x86_64-linux-gnu
+
 # TODO(https://github.com/istio/istio/issues/17656) clean up this hack
 COPY --from=default /sbin/xtables-multi /sbin/iptables* /sbin/ip6tables* /sbin/ip /sbin/
-COPY --from=default /usr/lib/x86_64-linux-gnu/xtables/ /usr/lib/x86_64-linux-gnu/xtables
-COPY --from=default /usr/lib/x86_64-linux-gnu/ /usr/lib/x86_64-linux-gnu
+COPY --from=default /usr/lib/${ARCH_TRIPLET_LINUX}/xtables/ /usr/lib/${ARCH_TRIPLET_LINUX}/xtables
+COPY --from=default /usr/lib/${ARCH_TRIPLET_LINUX}/ /usr/lib/${ARCH_TRIPLET_LINUX}
 COPY --from=default /etc/iproute2 /etc/iproute2
 
 COPY istio-iptables /usr/local/bin/istio-iptables
