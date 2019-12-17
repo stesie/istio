@@ -163,7 +163,7 @@ docker.test_policybackend: mixer/docker/Dockerfile.test_policybackend
 docker.test_policybackend: $(ISTIO_OUT_LINUX)/policybackend
 	$(DOCKER_RULE)
 
-docker.kubectl: BUILD_ARGS=--build-arg BASE_VERSION=${BASE_VERSION} --build-arg BASE_IMAGE=${BASE_IMAGE}
+docker.kubectl: BUILD_ARGS=--build-arg BASE_VERSION=${BASE_VERSION} --build-arg BASE_IMAGE=${BASE_IMAGE} --build-arg GOARCH_LINUX=${GOARCH_LINUX}
 docker.kubectl: docker/Dockerfile$$(suffix $$@)
 	$(DOCKER_RULE)
 
